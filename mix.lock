@@ -1,0 +1,2 @@
+%{"eiconv": {:git, "https://github.com/zotonic/eiconv.git", "644fb5e7bd6640fbd073f4d28957914ea979aea0", []},
+  "gen_smtp": {:hex, :gen_smtp, "0.9.0"}}
