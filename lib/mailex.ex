@@ -11,7 +11,7 @@ defmodule Mailex do
   ]
 
   def deliver(email, config \\ []) do
-    config = Keyword.merge(@config_defaults, config)
+    config = Keyword.merge(@config_defaults, config || [])
 
     message = email |> Mailex.Render.render
     from    = email.from |> Mailex.Address.envelope_format
@@ -24,9 +24,8 @@ defmodule Mailex do
                     msg -> { :ok, msg }
       end
     else
-      IO.puts "\n\n[[[ Mailex ]]]\n\nFROM: #{from}\nTO: #{to}\n"
-      IO.puts "RAW START -------\n#{message}\nRAW END -------"
-      {:ok, "dumped to console"}
+      IO.puts "\n\n[[[ Mailex ]]]\n\nFROM: #{from}\nTO: #{to}\n\nRAW START -------------\n#{message}\nRAW END -------------\n\n"
+      {:ok, "message dumped to console"}
     end
   end
 
