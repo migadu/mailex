@@ -109,13 +109,13 @@ defmodule Mailex.Render do
   def headers_for(email) do
     headers = []
 
-    if  email.reply_to, do:
+    if email.reply_to && (length(email.reply_to) > 0), do:
       headers = [ { "Reply-To", email.reply_to |> stringify_addresses } ]
 
-    if email.bcc, do:
+    if email.bcc && (length(email.bcc) > 0), do:
       headers = [ { "Bcc", email.bcc |> stringify_addresses } | headers ]
 
-    if email.cc, do:
+    if email.cc && (length(email.cc) > 0), do:
       headers = [ { "Cc", email.cc |> stringify_addresses } | headers ]
 
     [ { "From",    email.from |> stringify_addresses },
@@ -123,6 +123,9 @@ defmodule Mailex.Render do
       { "Subject", email.subject || "" }  | headers ]
   end
 
+
+  def stringify_addresses(nil), do: ""
+  def stringify_addresses([]),  do: ""
 
   def stringify_addresses(addresses) do
     addresses = addresses |> Address.rfc_822_format
