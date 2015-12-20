@@ -118,8 +118,10 @@ defmodule Mailex.Render do
     if email.cc && (length(email.cc) > 0), do:
       headers = [ { "Cc", email.cc |> stringify_addresses } | headers ]
 
+    if email.to && (length(email.to) > 0), do:
+      headers = [ { "To", email.to |> stringify_addresses } | headers ]
+
     [ { "From",    email.from |> stringify_addresses },
-      { "To",      email.to   |> stringify_addresses },
       { "Subject", email.subject || "" }  | headers ]
   end
 
