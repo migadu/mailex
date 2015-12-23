@@ -121,6 +121,9 @@ defmodule Mailex.Render do
     if email.to && (length(email.to) > 0), do:
       headers = [ { "To", email.to |> stringify_addresses } | headers ]
 
+    if email.headers && (length(email.headers) > 0), do:
+      headers = headers ++ email.headers
+
     [ { "From",    email.from |> stringify_addresses },
       { "Subject", email.subject || "" }  | headers ]
   end
