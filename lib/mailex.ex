@@ -14,17 +14,17 @@ defmodule Mailex do
     config = Keyword.merge(@config_defaults, config || [])
 
     message = email |> Mailex.Render.render
-    from    = email.from |> Mailex.Address.envelope_format
-    to      = email.to |> Mailex.Address.envelope_format
+    envelope_from = email.from |> Mailex.Address.envelope_format
+    envelope_to = (email.to ++ (email.cc || []) ++ (email.bcc || [])) |> Mailex.Address.envelope_format
 
     if Keyword.get(config, :relay) do
-      envelope = { from, to, message }
+      envelope = { envelope_from, envelope_to, message }
       case :gen_smtp_client.send_blocking(envelope, config) do
         { :error, msg } -> { :error, msg }
                     msg -> { :ok, msg }
       end
     else
-      IO.puts "\n\n[[[ Mailex ]]]\n\nFROM: #{from}\nTO: #{to}\n\nRAW START -------------\n#{message}\nRAW END -------------\n\n"
+      IO.puts "\n\n[[[ Mailex ]]]\n\nFROM: #{envelope_from}\nTO: #{envelope_to}\n\nRAW START -------------\n#{message}\nRAW END -------------\n\n"
       {:ok, "message dumped to console"}
     end
   end

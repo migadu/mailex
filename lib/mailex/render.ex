@@ -112,14 +112,18 @@ defmodule Mailex.Render do
     if email.reply_to && (length(email.reply_to) > 0), do:
       headers = [ { "Reply-To", email.reply_to |> stringify_addresses } ]
 
-    if email.bcc && (length(email.bcc) > 0), do:
-      headers = [ { "Bcc", email.bcc |> stringify_addresses } | headers ]
+    # BCC should not go into headers
 
     if email.cc && (length(email.cc) > 0), do:
       headers = [ { "Cc", email.cc |> stringify_addresses } | headers ]
 
+    if email.to && (length(email.to) > 0), do:
+      headers = [ { "To", email.to |> stringify_addresses } | headers ]
+
+    if email.headers && (length(email.headers) > 0), do:
+      headers = headers ++ email.headers
+
     [ { "From",    email.from |> stringify_addresses },
-      { "To",      email.to   |> stringify_addresses },
       { "Subject", email.subject || "" }  | headers ]
   end
 

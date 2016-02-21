@@ -7,16 +7,19 @@ defmodule Mailex.Address do
 
 
   def rfc_822_format(email) when is_map(email) do
-    if email.name do
-      "#{email.name} <#{email.address}>"
+    email_address = Map.get(email, "address", Map.get(email, :address))
+    email_name = Map.get(email, "name", Map.get(email, :name))
+
+    if email_name do
+      "#{email_name} <#{email_address}>"
     else
-      name = email.address |>
+      name = email_address |>
         String.split("@") |>
         List.first |>
         String.split(~r/([^\w\s]|_)/) |>
         Enum.map(&String.capitalize/1) |>
-        Enum.join " "
-      "#{name} <#{email.address}>"
+        Enum.join(" ")
+      "#{name} <#{email_address}>"
     end
   end
 
@@ -25,8 +28,10 @@ defmodule Mailex.Address do
     emails |> Enum.map(&envelope_format(&1))
 
 
-  def envelope_format(email) when is_map(email), do:
-    "<#{email.address}>"
+  def envelope_format(email) when is_map(email) do
+    email_address = Map.get(email, "address", Map.get(email, :address))
+    "<#{email_address}>"
+  end
 
 
 end
