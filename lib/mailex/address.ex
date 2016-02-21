@@ -18,7 +18,7 @@ defmodule Mailex.Address do
         List.first |>
         String.split(~r/([^\w\s]|_)/) |>
         Enum.map(&String.capitalize/1) |>
-        Enum.join " "
+        Enum.join(" ")
       "#{name} <#{email_address}>"
     end
   end
