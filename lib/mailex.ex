@@ -15,7 +15,7 @@ defmodule Mailex do
 
     message = email |> Mailex.Render.render
     envelope_from = email.from |> Mailex.Address.envelope_format
-    envelope_to = email.to ++ (email.cc || []) ++ (email.bcc || [])
+    envelope_to = (email.to ++ (email.cc || []) ++ (email.bcc || [])) |> Mailex.Address.envelope_format
 
     if Keyword.get(config, :relay) do
       envelope = { envelope_from, envelope_to, message }
