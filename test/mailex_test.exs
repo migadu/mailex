@@ -38,11 +38,19 @@ defmodule MailexTest do
     }
   end
 
+  defp email_with_special_chars_in_names do
+    %Mailex.Email{
+      from: %Mailex.Address{ name: ", Test", address: "test_a@gmail.com" },
+      to:   [%Mailex.Address{ name: ":,<>[]()'\"Whatever", address: "test_b@gmail.com" }]
+    }
+  end
+
   test "Messages render" do
     assert email_minimal |> Mailex.Render.render
     assert email_with_reply_to |> Mailex.Render.render
     assert email_without_attachments |> Mailex.Render.render
     assert email_with_attachments |> Mailex.Render.render
+    assert email_with_special_chars_in_names |> Mailex.Render.render
   end
 
 end

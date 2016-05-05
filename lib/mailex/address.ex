@@ -8,18 +8,28 @@ defmodule Mailex.Address do
 
   def rfc_822_format(email) when is_map(email) do
     email_address = Map.get(email, "address", Map.get(email, :address))
-    email_name = Map.get(email, "name", Map.get(email, :name))
+    email_name = email
+      |> Map.get("name", Map.get(email, :name))
+      |> prepare_name(email_address)
+    "#{email_name} <#{email_address}>"
+  end
 
+
+  defp prepare_name(email_name, address) do
     if email_name do
-      "#{email_name} <#{email_address}>"
+      email_name = String.strip(email_name)
     else
-      name = email_address |>
+      email_name = address |>
         String.split("@") |>
         List.first |>
         String.split(~r/([^\w\s]|_)/) |>
         Enum.map(&String.capitalize/1) |>
         Enum.join(" ")
-      "#{name} <#{email_address}>"
+    end
+    if String.match?(email_name, ~r/[\(\)\<\>\@\,\;\:\"\.\[\]\\]/) do
+      "\"\\\"" <> String.replace(email_name, "\"", "\\\"") <> "\\\"\""
+    else
+      email_name
     end
   end
 
