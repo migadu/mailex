@@ -3,15 +3,14 @@ defmodule Mailex.Render do
   alias Mailex.Address
 
   def render(email) do
-    mimemail_args = []
-    if email.text, do:
-      mimemail_args = [ { :plain, email.text } | mimemail_args]
-    if email.html, do:
-      mimemail_args = [ { :html, email.html } | mimemail_args]
-    if email.attachments, do:
-      mimemail_args = [ Enum.map(email.attachments, fn(a) -> { :attachment, a.data, a } end) | mimemail_args ]
+    mimemail_args = if email.text, do:
+      [ { :plain, email.text } ], else: []
+    mimemail_args = if email.html, do:
+      [ { :html, email.html } | mimemail_args], else: mimemail_args
+    mimemail_args = if email.attachments, do:
+      [ Enum.map(email.attachments, fn(a) -> { :attachment, a.data, a } end) | mimemail_args ], else: mimemail_args
 
-    mimemail_args |> List.flatten |> to_tuple(email) |> :mimemail.encode
+     List.flatten(mimemail_args) |> to_tuple(email) |> :mimemail.encode
   end
 
 
@@ -107,24 +106,16 @@ defmodule Mailex.Render do
 
 
   def headers_for(email) do
-    headers = []
-
-    if email.reply_to && (length(email.reply_to) > 0), do:
-      headers = [ { "Reply-To", email.reply_to |> stringify_addresses } ]
-
+    headers = if email.reply_to && (length(email.reply_to) > 0), do:
+      [ { "Reply-To", email.reply_to |> stringify_addresses } ], else: []
     # BCC should not go into headers
-
-    if email.cc && (length(email.cc) > 0), do:
-      headers = [ { "Cc", email.cc |> stringify_addresses } | headers ]
-
-    if email.to && (length(email.to) > 0), do:
-      headers = [ { "To", email.to |> stringify_addresses } | headers ]
-
-    if email.headers && (length(email.headers) > 0), do:
-      headers = headers ++ email.headers
-
-    [ { "From",    email.from |> stringify_addresses },
-      { "Subject", email.subject || "" }  | headers ]
+    headers = if email.cc && (length(email.cc) > 0), do:
+      [ { "Cc", email.cc |> stringify_addresses } | headers ], else: headers
+    headers = if email.to && (length(email.to) > 0), do:
+      [ { "To", email.to |> stringify_addresses } | headers ], else: headers
+    headers = if email.headers && (length(email.headers) > 0), do:
+      headers ++ email.headers, else: headers
+    [ { "From", email.from |> stringify_addresses }, { "Subject", email.subject || "" }  | headers ]
   end
 
 
