@@ -3,7 +3,7 @@ defmodule Mailex.Mixfile do
 
   def project do
     [app: :mailex,
-     version: "0.0.1",
+     version: "0.0.2",
      elixir: "~> 1.1",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -16,8 +16,9 @@ defmodule Mailex.Mixfile do
 
   defp deps do
     [
-      { :eiconv, github: "zotonic/eiconv" },
-      { :gen_smtp, ">= 0.9.0" }
+      # { :eiconv, github: "zotonic/eiconv" },
+      {:eiconv, "~> 1.0"},
+      { :gen_smtp, ">= 0.13.0" }
     ]
   end
 end

@@ -1,2 +1,4 @@
-%{"eiconv": {:git, "https://github.com/zotonic/eiconv.git", "644fb5e7bd6640fbd073f4d28957914ea979aea0", []},
-  "gen_smtp": {:hex, :gen_smtp, "0.11.0", "d90ff2f021fc86cb2a4259b1f2b177ab6e506676265e26454bf5755855adc956", [:rebar3], []}}
+%{
+  "eiconv": {:hex, :eiconv, "1.0.0", "ee1e47ee37799a05beff7a68d61f63cccc93101833c4fb94b454c23b12a21629", [:rebar3], [], "hexpm"},
+  "gen_smtp": {:hex, :gen_smtp, "0.13.0", "11f08504c4bdd831dc520b8f84a1dce5ce624474a797394e7aafd3c29f5dcd25", [:rebar3], [], "hexpm"},
+}
