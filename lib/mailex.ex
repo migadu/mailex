@@ -19,7 +19,7 @@ defmodule Mailex do
 
     if Keyword.get(config, :relay) do
       envelope = { envelope_from, envelope_to, message }
-      IO.puts "\n[[ Mailex ]] ${inspect(envelope)}"
+      IO.puts "\n[[ Mailex ]] #{inspect(envelope)}"
       case :gen_smtp_client.send_blocking(envelope, config) do
         { :error, msg } -> IO.puts "\n\nERROR sending message"; IO.inspect(envelope); { :error, msg }
                     msg -> { :ok, msg }
